@@ -1,5 +1,6 @@
 import pandas as pd
 from ACO.ACO import AntColonyOptimization
+from PSO.PSO import ParticleSwarmOptimization
 
 
 # weights = [95, 4, 60, 32, 23, 72, 80, 62, 65, 46]         # 最优解: value = 295, weight = 269
@@ -13,13 +14,25 @@ diamonds = diamonds.iloc[:100]                              # 最优解: value =
 weights = diamonds['carat'].values
 values = diamonds['price'].values
 max_weight = 10
+n_iters = 10000
 
 
-# ACO param
-n_iters = 100
-n_ants = 50
-alpha = 0.7
-beta = 2.3
-decay = 0.9
-ACO = AntColonyOptimization(values, weights, max_weight, n_ants, n_iters, alpha, beta, decay)
-ACO.solve()
+# # ACO param
+# n_ants = 50
+# alpha = 0.7
+# beta = 2.3
+# decay = 0.9
+# ACO = AntColonyOptimization(values, weights, max_weight, n_iters, n_ants, alpha, beta, decay)
+# ACO.solve()
+
+
+# PSO param
+n_particles = 1000
+c1 = 2
+c2 = 2
+Wmax = 0.6
+Wmin = 0.5
+Vmax = 10
+Vmin = -10
+PSO = ParticleSwarmOptimization(values, weights, max_weight, n_iters,n_particles, c1, c2, Wmax, Wmin, Vmax, Vmin)
+PSO.solve()

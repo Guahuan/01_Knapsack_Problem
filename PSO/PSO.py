@@ -1,72 +1,71 @@
 import random
+import numpy as np
+"""
+    refer：https://wenku.baidu.com/view/e8bcba23b91aa8114431b90d6c85ec3a87c28bc8.html?_wkts_=1712825921866&bdQuery=粒子群算法+01背包&needWelcomeRecommand=1
+    1、粒子坐标，01二进制位串
+    2、粒子速度
+    3、粒子更新方式
+"""
+class ParticleSwarmOptimization:
+    def __init__(self, values, weights, max_weight, n_iters, n_particles, c1, c2, Wmax, Wmin, Vmax, Vmin):
+        self.values = values
+        self.weights = weights
+        self.max_weight = max_weight
+        self.n_iters = n_iters
+        self.n_particles = n_particles
+        self.c1 = c1
+        self.c2 = c2
+        self.Wmax = Wmax
+        self.Wmin = Wmin
+        self.Vmax = Vmax
+        self.Vmin = Vmin
 
-class Particle:
-    def __init__(self, position):
-        self.position = position
-        self.velocity = [random.uniform(-1, 1) for _ in range(len(position))]
-        self.best_position = position
-        self.best_fitness = self.fitness()
+        self.n_item = len(values)
 
-    def fitness(self):
-        # Calculate the fitness value of the particle's current position
-        # based on the 0/1 Knapsack Problem constraints and objective function
-        # Return the fitness value
+        self.particlesX = [[random.randint(0, 1) for _ in range(self.n_item)] for _ in range(self.n_particles)]
 
-    def update_velocity(self, global_best_position, inertia_weight, cognitive_weight, social_weight):
-        # Update the particle's velocity based on the PSO formula
-        # using the global best position, inertia weight, cognitive weight, and social weight
+        self.particlesV = [[random.uniform(self.Vmin, self.Vmax) for _ in range(self.n_item)] for _ in range(self.n_particles)]
 
-    def update_position(self):
-        # Update the particle's position based on its velocity
+        self.g_best = self.particlesX[0]
+        self.g_best_fitness = self.fitness(self.g_best)
 
-        # Ensure that the position remains within the feasible solution space
-        # by applying any necessary constraints
+        self.p_best = self.particlesX
+        self.p_best_fitness = [self.fitness(particle) for particle in self.p_best]
 
-        # Update the particle's best position and fitness if necessary
 
-class PSO:
-    def __init__(self, num_particles, max_iterations):
-        self.num_particles = num_particles
-        self.max_iterations = max_iterations
-        self.global_best_position = None
-        self.global_best_fitness = float('-inf')
-        self.particles = []
+    def solve(self):
+        for iter in range(self.n_iters):
+            for i in range(self.n_particles):
+                particle = self.particlesX[i]
+                fitness = self.fitness(particle)
 
-    def initialize_particles(self):
-        # Initialize the particles with random positions
+                if fitness > self.fitness(self.p_best[i]):
+                    self.p_best[i] = particle
 
-    def update_global_best(self):
-        # Update the global best position and fitness based on the particles' best positions
+                if fitness > self.g_best_fitness:
+                    self.g_best = particle
+                    self.g_best_fitness = fitness
 
-    def optimize(self):
-        self.initialize_particles()
+            w = self.Wmax - (self.Wmax - self.Wmin) * iter / self.n_iters
 
-        for _ in range(self.max_iterations):
-            for particle in self.particles:
-                particle.update_velocity(self.global_best_position, inertia_weight, cognitive_weight, social_weight)
-                particle.update_position()
-                particle_fitness = particle.fitness()
+            for i in range(self.n_particles):
+                r1 = random.random()
+                r2 = random.random()
+                new_V = w * np.array(self.particlesV[i]) + \
+                    self.c1 * r1 * (np.array(self.p_best[i]) - np.array(self.particlesX[i])) + \
+                        self.c2 * r2 * (np.array(self.g_best) - np.array(self.particlesX[i]))
+                self.particlesV[i] = np.clip(new_V, self.Vmin, self.Vmax)
 
-                if particle_fitness > particle.best_fitness:
-                    particle.best_fitness = particle_fitness
-                    particle.best_position = particle.position
+                new_X = 1 / (1 + np.exp(-np.array(self.particlesV[i])))
+                self.particlesX[i] = [1 if vx > random.random() else 0 for vx in new_X]
 
-                if particle_fitness > self.global_best_fitness:
-                    self.global_best_fitness = particle_fitness
-                    self.global_best_position = particle.position
+            print("iter: ", iter)
+            print("best value: ", self.g_best_fitness)
+            print("best weight: ", np.sum(np.array(self.weights) * np.array(self.g_best)))
 
-        return self.global_best_position, self.global_best_fitness
 
-# Example usage
-num_particles = 50
-max_iterations = 100
-inertia_weight = 0.7
-cognitive_weight = 1.5
-social_weight = 1.5
-
-pso = PSO(num_particles, max_iterations)
-best_position, best_fitness = pso.optimize()
-
-print("Best solution found:")
-print("Position:", best_position)
-print("Fitness:", best_fitness)
+    def fitness(self, particle):
+        if np.sum(np.array(self.weights) * np.array(particle)) > self.max_weight:
+            return 0
+        else:
+            return np.sum(np.array(self.values) * np.array(particle))
