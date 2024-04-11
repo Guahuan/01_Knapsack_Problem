@@ -1,4 +1,5 @@
 import pandas as pd
+from GA.GA import GeneticAlgorithm
 from ACO.ACO import AntColonyOptimization
 from PSO.PSO import ParticleSwarmOptimization
 
@@ -15,6 +16,11 @@ weights = diamonds['carat'].values
 values = diamonds['price'].values
 max_weight = 10
 n_iters = 1000
+
+
+# GA param
+GA = GeneticAlgorithm(values, weights, max_weight)
+GA.solve()
 
 
 # ACO param
