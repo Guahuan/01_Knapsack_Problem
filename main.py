@@ -14,6 +14,7 @@ weights = diamonds['carat'].values
 values = diamonds['price'].values
 max_weight = 10
 
+
 # ACO param
 n_iters = 100
 n_ants = 50
