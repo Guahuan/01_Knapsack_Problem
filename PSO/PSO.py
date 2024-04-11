@@ -2,14 +2,15 @@ import random
 import numpy as np
 """
     refer：https://wenku.baidu.com/view/e8bcba23b91aa8114431b90d6c85ec3a87c28bc8.html?_wkts_=1712825921866&bdQuery=粒子群算法+01背包&needWelcomeRecommand=1
+        https://blog.csdn.net/qq_43808253/article/details/130588142
     1、粒子坐标，01二进制位串
     2、粒子速度
     3、粒子更新方式
 """
 class ParticleSwarmOptimization:
     def __init__(self, values, weights, max_weight, n_iters, n_particles, c1, c2, Wmax, Wmin, Vmax, Vmin):
-        self.values = values
-        self.weights = weights
+        self.weights = np.array(weights)
+        self.values = np.array(values)
         self.max_weight = max_weight
         self.n_iters = n_iters
         self.n_particles = n_particles
@@ -65,7 +66,7 @@ class ParticleSwarmOptimization:
 
 
     def fitness(self, particle):
-        if np.sum(np.array(self.weights) * np.array(particle)) > self.max_weight:
+        if np.sum(self.weights * particle) > self.max_weight:
             return 0
         else:
-            return np.sum(np.array(self.values) * np.array(particle))
+            return np.sum(self.values * particle)
