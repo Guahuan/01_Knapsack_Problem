@@ -9,7 +9,7 @@ from ACO.ACO import AntColonyOptimization
 
 # Unified param
 diamonds = pd.read_csv('diamonds.csv')
-diamonds = diamonds.iloc[:100]                              # 最优解: value = 32571, weight = 10
+diamonds = diamonds.iloc[:100]                              # 最优解: value = 32615, weight = 10
 weights = diamonds['carat'].values
 values = diamonds['price'].values
 max_weight = 10

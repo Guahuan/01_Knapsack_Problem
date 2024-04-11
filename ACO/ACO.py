@@ -40,6 +40,7 @@ class AntColonyOptimization:
             solutions = []
             total_values = []
 
+            # TODO: parallel
             for ant in range(self.n_ants):
                 solution, total_value = self.construct_solution()
                 solutions.append(solution)
@@ -79,18 +80,16 @@ class AntColonyOptimization:
         return solution, total_value
 
     def cal_probability(self, tabu):
-        down = 0
-        for s in range(self.n_item):
-            if tabu[s] == 0:
-                down += self.pheromone[s] ** self.alpha * (self.values[s] / self.weights[s]) ** self.beta
-        p = [0 for _ in range(self.n_item)]
-        for i in range(self.n_item):
-            if tabu[i] == 0:
-                p[i] = (self.pheromone[i] ** self.alpha * (self.values[i] / self.weights[i]) ** self.beta) / down
-        return p
+        tabu = np.array(tabu)
+        mask = (tabu == 0)
+        down = np.sum(self.pheromone[mask] ** self.alpha * (self.values[mask] / self.weights[mask]) ** self.beta)
+        p = np.zeros(self.n_item)
+        p[mask] = (self.pheromone[mask] ** self.alpha * (self.values[mask] / self.weights[mask]) ** self.beta) / down
+        return p.tolist()
 
     def update_pheromone(self, solutions, total_values):
         self.pheromone = (1 - self.decay) * self.pheromone
-        for k in range(len(solutions)):
-            self.pheromone += np.array(solutions[k]) * self.values * total_values[k]
+        solutions = np.array(solutions)
+        total_values = np.array(total_values)
+        self.pheromone += np.sum(solutions * self.values * total_values[:, None], axis=0)
 
