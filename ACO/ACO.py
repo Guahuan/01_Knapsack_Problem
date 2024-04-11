@@ -1,7 +1,11 @@
 import numpy as np
 
 # Refer: https://www.doc88.com/p-487729432921.html
-#
+"""
+    1、选择概率函数
+    2、如何限制重量
+    3、更新信息素
+"""
 class AntColonyOptimization:
     def __init__(self, values, weights, max_weight, n_ants, n_iters, alpha, beta, decay):
         """
