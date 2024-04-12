@@ -1,5 +1,6 @@
 import pandas as pd
 from GA.GA import GeneticAlgorithm
+from TS.TS import TabuKnapsackSolver
 from ACO.ACO import AntColonyOptimization
 from PSO.PSO import ParticleSwarmOptimization
 
@@ -18,27 +19,32 @@ max_weight = 10
 n_iters = 1000
 
 
-# GA param
-GA = GeneticAlgorithm(values, weights, max_weight)
-GA.solve()
+# # GA param
+# GA = GeneticAlgorithm(values, weights, max_weight)
+# GA.solve()
+
+# TS param
+tabu_size = 100
+TS = TabuKnapsackSolver(values, weights, max_weight, tabu_size, n_iters)
+TS.solve()
 
 
-# ACO param
-n_ants = 50
-alpha = 0.7
-beta = 2.3
-decay = 0.9
-ACO = AntColonyOptimization(values, weights, max_weight, n_iters, n_ants, alpha, beta, decay)
-ACO.solve()
+# # ACO param
+# n_ants = 50
+# alpha = 0.7
+# beta = 2.3
+# decay = 0.9
+# ACO = AntColonyOptimization(values, weights, max_weight, n_iters, n_ants, alpha, beta, decay)
+# ACO.solve()
 
 
-# PSO param
-n_particles = 1000
-c1 = 1.5
-c2 = 0.8
-Wmax = 1
-Wmin = 1
-Vmax = 10
-Vmin = -10
-PSO = ParticleSwarmOptimization(values, weights, max_weight, n_iters,n_particles, c1, c2, Wmax, Wmin, Vmax, Vmin)
-PSO.solve()
+# # PSO param
+# n_particles = 1000
+# c1 = 1.5
+# c2 = 0.8
+# Wmax = 1
+# Wmin = 1
+# Vmax = 10
+# Vmin = -10
+# PSO = ParticleSwarmOptimization(values, weights, max_weight, n_iters,n_particles, c1, c2, Wmax, Wmin, Vmax, Vmin)
+# PSO.solve()
