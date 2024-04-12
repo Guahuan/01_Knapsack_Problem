@@ -1,5 +1,6 @@
 import pandas as pd
 from GA.GA import GeneticAlgorithm
+from SA.SA import SimulatedAnnealing
 from TS.TS import TabuKnapsackSolver
 from ACO.ACO import AntColonyOptimization
 from PSO.PSO import ParticleSwarmOptimization
@@ -23,10 +24,19 @@ n_iters = 1000
 # GA = GeneticAlgorithm(values, weights, max_weight)
 # GA.solve()
 
-# TS param
-tabu_size = 100
-TS = TabuKnapsackSolver(values, weights, max_weight, tabu_size, n_iters)
-TS.solve()
+
+# # TS param
+# tabu_size = 100
+# TS = TabuKnapsackSolver(values, weights, max_weight, n_iters, tabu_size)
+# TS.solve()
+
+
+# SA param
+max_temp = 1000
+min_temp = 1
+cooling_rate = 0.99
+SA = SimulatedAnnealing(values, weights, max_weight, n_iters, max_temp, min_temp, cooling_rate)
+SA.solve()
 
 
 # # ACO param

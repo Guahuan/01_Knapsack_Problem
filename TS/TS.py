@@ -2,13 +2,13 @@ import pandas as pd
 import random
 
 class TabuKnapsackSolver:
-    def __init__(self, values, weights, max_weight, tabu_size, n_iters):
+    def __init__(self, values, weights, max_weight, n_iters, tabu_size):
         self.values = values
         self.weights = weights
         self.max_weight = max_weight
-        self.tabu_size = tabu_size
         self.n_iters = n_iters
         self.n_items = len(values)
+        self.tabu_size = tabu_size
         self.tabu_list = []
 
     def solve(self):
