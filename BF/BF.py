@@ -1,6 +1,6 @@
 import itertools
 
-class BruteForceKnapsackSolver:
+class BruteForce:
     def __init__(self, values, weights, max_weight):
         self.values = values
         self.weights = weights

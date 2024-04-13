@@ -1,6 +1,6 @@
 import pandas as pd
-from BF.BF import BruteForceKnapsackSolver
-from DP.DP import dynamic_knapsack
+from BF.BF import BruteForce
+from DP.DP import DynamicProgramming
 from Greedy.Greedy import GreedyKnapsackSolver
 from TS.TS import TabuKnapsackSolver
 from GA.GA import GeneticAlgorithm
@@ -9,13 +9,14 @@ from ACO.ACO import AntColonyOptimization
 from PSO.PSO import ParticleSwarmOptimization
 
 
-weights = [95, 4, 60, 32, 23, 72, 80, 62, 65, 46]         # 最优解: value = 295, weight = 269
+# 最优解: value = 295
+weights = [95, 4, 60, 32, 23, 72, 80, 62, 65, 46]
 values = [55, 10, 47, 5, 4, 50, 8, 61, 85, 87]
 max_weight = 269
 
 
 # # Unified param
-# # 近似最优解: value = 32615, weight = 10
+# # 最优解: value = 32616
 # diamonds = pd.read_csv('diamonds.csv')
 # diamonds = diamonds.iloc[:100]
 # weights = diamonds['carat'].values
@@ -24,20 +25,19 @@ max_weight = 269
 # n_iters = 1000
 
 
-# BF
-BF = BruteForceKnapsackSolver(values, weights, max_weight)
-BF_best_value = BF.solve()
+# # BF
+# BF = BruteForce(values, weights, max_weight)
+# BF_best_value = BF.solve()
 
 
 # # DP
-# best_value, best_combination = dynamic_knapsack(values, weights, max_weight)
-# print("最优解的总价值:", best_value)
-# print("最优解的总重量:", sum(weights[int(i)] for i in range(len(best_combination)) if best_combination[i] == 1))
+# DP = DynamicProgramming(values, weights, max_weight)
+# DP_best_value = DP.solve()
 
 
-# # Greedy param
-# Greedy = GreedyKnapsackSolver(values, weights, max_weight)
-# Greedy.solve()
+# Greedy param
+Greedy = GreedyKnapsackSolver(values, weights, max_weight)
+Greedy.solve()
 
 
 # # TS param
