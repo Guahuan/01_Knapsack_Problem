@@ -1,5 +1,5 @@
 import pandas as pd
-from GA.GA import GeneticAlgorithm
+from Greedy.Greedy import GreedyKnapsackSolver
 from SA.SA import SimulatedAnnealing
 from TS.TS import TabuKnapsackSolver
 from ACO.ACO import AntColonyOptimization
@@ -21,7 +21,7 @@ n_iters = 1000
 
 
 # # GA param
-# GA = GeneticAlgorithm(values, weights, max_weight)
+# GA = GreedyKnapsackSolver(values, weights, max_weight)
 # GA.solve()
 
 

@@ -1,14 +1,14 @@
-import pandas as pd
 import random
 
+
 class TabuKnapsackSolver:
-    def __init__(self, values, weights, max_weight, n_iters, tabu_size):
+    def __init__(self, values, weights, max_weight, tabu_size, max_iterations):
         self.values = values
         self.weights = weights
         self.max_weight = max_weight
-        self.n_iters = n_iters
-        self.n_items = len(values)
         self.tabu_size = tabu_size
+        self.max_iterations = max_iterations
+        self.n_items = len(values)
         self.tabu_list = []
 
     def solve(self):
@@ -16,7 +16,8 @@ class TabuKnapsackSolver:
         best_solution = current_solution[:]
         best_value = self.calculate_value(current_solution)
 
-        for iter in range(self.n_iters):
+        iteration = 0
+        while iteration < self.max_iterations:
             neighbor_solution = self.generate_neighbor(current_solution)
             neighbor_value = self.calculate_value(neighbor_solution)
 
@@ -28,9 +29,9 @@ class TabuKnapsackSolver:
 
             self.update_tabu_list(current_solution)
 
-            print("iter: ", iter)
-            print("best value: ", best_value)
-            print("best weight: ", self.calculate_weight(best_solution))
+            iteration += 1
+
+        return best_value, self.calculate_weight(best_solution), best_solution
 
     def generate_initial_solution(self):
         solution = [random.choice([0, 1]) for _ in range(self.n_items)]
@@ -40,11 +41,15 @@ class TabuKnapsackSolver:
 
     def generate_neighbor(self, solution):
         neighbor = solution[:]
-        idx = random.randint(0, self.n_items - 1)
-        neighbor[idx] = 1 - neighbor[idx]  # Flip the bit
+        idx1 = random.randint(0, self.n_items - 1)
+        idx2 = random.randint(0, self.n_items - 1)
+        neighbor[idx1] = 1 - neighbor[idx1]  # Flip the bit
+        neighbor[idx2] = 1 - neighbor[idx2]  # Flip the bit
         while self.calculate_weight(neighbor) > self.max_weight or neighbor in self.tabu_list:
-            idx = random.randint(0, self.n_items - 1)
-            neighbor[idx] = 1 - neighbor[idx]  # Flip the bit
+            idx1 = random.randint(0, self.n_items - 1)
+            idx2 = random.randint(0, self.n_items - 1)
+            neighbor[idx1] = 1 - neighbor[idx1]  # Flip the bit
+            neighbor[idx2] = 1 - neighbor[idx2]  # Flip the bit
         return neighbor
 
     def update_tabu_list(self, solution):
@@ -53,7 +58,7 @@ class TabuKnapsackSolver:
             self.tabu_list.pop(0)
 
     def calculate_value(self, solution):
-        return sum(self.values * solution)
+        return sum(value * solution[i] for i, value in enumerate(self.values))
 
     def calculate_weight(self, solution):
-        return sum(self.weights * solution)
+        return sum(weight * solution[i] for i, weight in enumerate(self.weights))
