@@ -8,6 +8,3 @@
 - Genetic Algorithm
 - Ant Colony Optimization
 - Particle Swarm Optimization
-
-
-陈雨晴
