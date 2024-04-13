@@ -37,7 +37,7 @@ max_weight = 269
 
 # Greedy param
 Greedy = GreedyKnapsackSolver(values, weights, max_weight)
-Greedy.solve()
+Greedy_best_value = Greedy.solve()
 
 
 # # TS param

@@ -24,5 +24,7 @@ class GreedyKnapsackSolver:
         self.total_value = sum(self.values[i] for i in self.selected_items)
         self.total_weight = sum(self.weights[i] for i in self.selected_items)
 
+        return self.total_value
+
         print("best value: ", self.total_value)
         print("best weight: ", self.total_weight)
