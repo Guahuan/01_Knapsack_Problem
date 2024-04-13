@@ -35,15 +35,15 @@ max_weight = 269
 # DP_best_value = DP.solve()
 
 
-# Greedy param
-Greedy = GreedyKnapsackSolver(values, weights, max_weight)
-Greedy_best_value = Greedy.solve()
+# # Greedy param
+# Greedy = GreedyKnapsackSolver(values, weights, max_weight)
+# Greedy_best_value = Greedy.solve()
 
 
-# # TS param
-# tabu_size = 100
-# TS = TabuKnapsackSolver(values, weights, max_weight, n_iters, tabu_size)
-# TS.solve()
+# TS param
+tabu_size = 100
+TS = TabuKnapsackSolver(values, weights, max_weight, n_iters, tabu_size)
+TS.solve()
 
 
 # # GA param
