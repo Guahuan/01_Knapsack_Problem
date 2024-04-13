@@ -15,12 +15,12 @@ from PSO.PSO import ParticleSwarmOptimization
 
 
 # set all the parameters here
-output_file = 'big_32616.csv'
+output_file = './output/big_32616.csv'
 max_data_length = 1500
 
 
 # 最优解: value = 32616
-diamonds = pd.read_csv('diamonds.csv')
+diamonds = pd.read_csv('./input/diamonds.csv')
 diamonds = diamonds.iloc[:100]
 weights = diamonds['carat'].values
 values = diamonds['price'].values

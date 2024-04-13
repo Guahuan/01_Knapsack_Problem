@@ -15,7 +15,7 @@ from PSO.PSO import ParticleSwarmOptimization
 
 
 # set all the parameters here
-output_file = 'small_295.csv'
+output_file = './output/small_295.csv'
 max_data_length = 300
 
 # 最优解: value = 295
