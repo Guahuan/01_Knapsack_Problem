@@ -1,5 +1,6 @@
-import pandas as pd
 import random
+import numpy as np
+
 
 class TabuKnapsackSolver:
     def __init__(self, values, weights, max_weight, n_iters, tabu_size):
@@ -10,6 +11,8 @@ class TabuKnapsackSolver:
         self.n_items = len(values)
         self.tabu_size = tabu_size
         self.tabu_list = []
+        self.best_values = []
+
 
     def solve(self):
         current_solution = self.generate_initial_solution()
@@ -28,15 +31,21 @@ class TabuKnapsackSolver:
 
             self.update_tabu_list(current_solution)
 
-            print("iter: ", iter)
-            print("best value: ", best_value)
-            print("best weight: ", self.calculate_weight(best_solution))
+            self.best_values.append(best_value)
+
+            # print("iter: ", iter)
+            # print("best value: ", best_value)
+            # print("best weight: ", self.calculate_weight(best_solution))
+
+        return self.best_values
+
 
     def generate_initial_solution(self):
         solution = [random.choice([0, 1]) for _ in range(self.n_items)]
         while self.calculate_weight(solution) > self.max_weight:
             solution = [random.choice([0, 1]) for _ in range(self.n_items)]
         return solution
+
 
     def generate_neighbor(self, solution):
         neighbor = solution[:]
@@ -51,13 +60,16 @@ class TabuKnapsackSolver:
             neighbor[idx2] = 1 - neighbor[idx2]  # Flip the bit
         return neighbor
 
+
     def update_tabu_list(self, solution):
         self.tabu_list.append(solution)
         if len(self.tabu_list) > self.tabu_size:
             self.tabu_list.pop(0)
 
+
     def calculate_value(self, solution):
-        return sum(self.values * solution)
+        return np.sum(np.array(self.values) * np.array(solution))
+
 
     def calculate_weight(self, solution):
-        return sum(self.weights * solution)
+        return np.sum(np.array(self.weights) * np.array(solution))

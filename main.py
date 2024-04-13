@@ -13,9 +13,9 @@ from PSO.PSO import ParticleSwarmOptimization
 weights = [95, 4, 60, 32, 23, 72, 80, 62, 65, 46]
 values = [55, 10, 47, 5, 4, 50, 8, 61, 85, 87]
 max_weight = 269
+n_iters = 1000
 
 
-# # Unified param
 # # 最优解: value = 32616
 # diamonds = pd.read_csv('diamonds.csv')
 # diamonds = diamonds.iloc[:100]
@@ -35,7 +35,7 @@ max_weight = 269
 # DP_best_value = DP.solve()
 
 
-# # Greedy param
+# # Greedy
 # Greedy = GreedyKnapsackSolver(values, weights, max_weight)
 # Greedy_best_value = Greedy.solve()
 
@@ -43,7 +43,7 @@ max_weight = 269
 # TS param
 tabu_size = 100
 TS = TabuKnapsackSolver(values, weights, max_weight, n_iters, tabu_size)
-TS.solve()
+TS_best_values = TS.solve()
 
 
 # # GA param
