@@ -45,12 +45,12 @@ class SimulatedAnnealing:
                     self.best_value = self.calculate_value(solution)
                     self.best_weight = self.calculate_weight(solution)
 
-                self.best_values.append(self.best_value)
                 # print("iter: ", iter)
                 # print("best value: ", self.best_value)
                 # print("best weight: ", self.best_weight)
 
             temp *= self.cooling_rate
+            self.best_values.append(self.best_value)
 
         return self.best_values
 
