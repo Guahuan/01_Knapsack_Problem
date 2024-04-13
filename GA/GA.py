@@ -17,6 +17,8 @@ class GeneticAlgorithm:
         self.best_weight = 0
         self.best_weight_pop = []
 
+        self.best_values = []
+
     def sum_pw(self, individual, profit_or_weight):
         total = 0
         for i in range(len(individual)):
@@ -122,13 +124,13 @@ class GeneticAlgorithm:
                 temporary.append(self.population[i])
         self.population = temporary
 
-    def run(self):
+    def solve(self):
         self.init_population()
         iter = 0
         while iter < self.N:
             iter += 1
             # print("——————————————————————————————————————————————————————————————————————————————————————————————————————")
-            print(f'第{iter}代')
+            # print(f'第{iter}代')
             # print(f'第{iter}代群体为:', self.population)
 
             total_weight, total_profit = self.compute_fitness()
@@ -162,8 +164,12 @@ class GeneticAlgorithm:
                 self.best_weight = total_weight[m]
                 self.best_weight_pop = total_weight
 
-            print("全局最优个体价值为:", self.best_fitness)
-            print("全局最优个体重量为：", self.best_weight)
+
+            # print("全局最优个体价值为:", self.best_fitness)
+            # print("全局最优个体重量为：", self.best_weight)
+            self.best_values.append(self.best_fitness)
+
+        return self.best_values
 
         # print("全局最优个体种群为：", self.best_individual_pop)
         # print("全局最优个体为：", self.best_individual)
