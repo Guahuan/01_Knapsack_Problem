@@ -24,9 +24,9 @@ max_weight = 269
 # n_iters = 1000
 
 
-# # BF
-# BF = BruteForceKnapsackSolver(values, weights, max_weight)
-# BF.solve()
+# BF
+BF = BruteForceKnapsackSolver(values, weights, max_weight)
+BF_best_value = BF.solve()
 
 
 # # DP

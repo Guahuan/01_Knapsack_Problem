@@ -21,7 +21,7 @@ class BruteForceKnapsackSolver:
                         best_value = value
                         best_combination = combination
 
-        return best_value, sum(self.weights[i] for i in best_combination)
+        return best_value
 
-        # print("best value: ", best_value)
-        # print("best weight: ", sum(self.weights[i] for i in best_combination))
+        print("best value: ", best_value)
+        print("best weight: ", sum(self.weights[i] for i in best_combination))
