@@ -50,6 +50,8 @@ class AntColonyOptimization:
 
             self.update_pheromone(solutions, total_values)
 
+            self.best_values.append(total_value)
+
             # print("iter: ", iter)
             # print("best value: ", self.best_value)
             # print("best weight: ", self.best_weight)
@@ -81,8 +83,6 @@ class AntColonyOptimization:
             self.best_value = total_value
             self.best_weight = total_weight
             self.best_solution = solution
-
-        self.best_values.append(total_value)
 
         return solution, total_value
 
