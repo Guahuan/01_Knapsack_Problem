@@ -35,6 +35,8 @@ class AntColonyOptimization:
         self.best_weight = 0
         self.best_solution = None
 
+        self.best_values = []
+
     def solve(self):
         for iter in range(self.n_iters):
             solutions = []
@@ -48,10 +50,13 @@ class AntColonyOptimization:
 
             self.update_pheromone(solutions, total_values)
 
-            print("iter: ", iter)
-            print("best value: ", self.best_value)
-            print("best weight: ", self.best_weight)
-            # print("best solution: ", self.best_solution)
+            # print("iter: ", iter)
+            # print("best value: ", self.best_value)
+            # print("best weight: ", self.best_weight)
+            # # print("best solution: ", self.best_solution)
+
+        return self.best_values
+
 
     def construct_solution(self):
         tabu = [0 for _ in range(self.n_item)]
@@ -77,14 +82,18 @@ class AntColonyOptimization:
             self.best_weight = total_weight
             self.best_solution = solution
 
+        self.best_values.append(total_value)
+
         return solution, total_value
 
     def cal_probability(self, tabu):
         tabu = np.array(tabu)
         mask = (tabu == 0)
-        down = np.sum(self.pheromone[mask] ** self.alpha * (self.values[mask] / self.weights[mask]) ** self.beta)
+        values = np.array(self.values)
+        weights = np.array(self.weights)
+        down = np.sum(self.pheromone[mask] ** self.alpha * ((values / weights)[mask] ** self.beta))
         p = np.zeros(self.n_item)
-        p[mask] = (self.pheromone[mask] ** self.alpha * (self.values[mask] / self.weights[mask]) ** self.beta) / down
+        p[mask] = (self.pheromone[mask] ** self.alpha * (values[mask] / weights[mask]) ** self.beta) / down
         return p.tolist()
 
     def update_pheromone(self, solutions, total_values):

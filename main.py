@@ -33,7 +33,7 @@ else:
 weights = [95, 4, 60, 32, 23, 72, 80, 62, 65, 46]
 values = [55, 10, 47, 5, 4, 50, 8, 61, 85, 87]
 max_weight = 269
-n_iters = 100
+n_iters = 10
 
 
 # # 最优解: value = 32616
@@ -86,17 +86,17 @@ n_iters = 100
 # df.to_csv('res.csv', index=False)
 
 
-# SA param
-max_temp = 1000
-min_temp = 1
-cooling_rate = 0.99
-SA = SimulatedAnnealing(values, weights, max_weight, n_iters, max_temp, min_temp, cooling_rate)
-SA_best_values = SA.solve()
+# # SA param
+# max_temp = 1000
+# min_temp = 1
+# cooling_rate = 0.99
+# SA = SimulatedAnnealing(values, weights, max_weight, n_iters, max_temp, min_temp, cooling_rate)
+# SA_best_values = SA.solve()
 
-SA_best_values = SA_best_values + [None] * (len(df) - len(SA_best_values))
-SA_best_values_series = pd.Series(SA_best_values).ffill()
-df['Simulated Annealing'] = SA_best_values_series
-df.to_csv('res.csv', index=False)
+# SA_best_values = SA_best_values + [None] * (len(df) - len(SA_best_values))
+# SA_best_values_series = pd.Series(SA_best_values).ffill()
+# df['Simulated Annealing'] = SA_best_values_series
+# df.to_csv('res.csv', index=False)
 
 
 # # GA param
@@ -118,16 +118,21 @@ df.to_csv('res.csv', index=False)
 # beta = 2.3
 # decay = 0.9
 # ACO = AntColonyOptimization(values, weights, max_weight, n_iters, n_ants, alpha, beta, decay)
-# ACO.solve()
+# ACO_best_values = ACO.solve()
+
+# ACO_best_values = ACO_best_values + [None] * (len(df) - len(ACO_best_values))
+# ACO_best_values_series = pd.Series(ACO_best_values).ffill()
+# df['Ant Colony Optimization'] = ACO_best_values_series
+# df.to_csv('res.csv', index=False)
 
 
-# # PSO param
-# n_particles = 1000
-# c1 = 1.5
-# c2 = 0.8
-# Wmax = 1
-# Wmin = 1
-# Vmax = 10
-# Vmin = -10
-# PSO = ParticleSwarmOptimization(values, weights, max_weight, n_iters,n_particles, c1, c2, Wmax, Wmin, Vmax, Vmin)
-# PSO.solve()
+# PSO param
+n_particles = 1000
+c1 = 1.5
+c2 = 0.8
+Wmax = 1
+Wmin = 1
+Vmax = 10
+Vmin = -10
+PSO = ParticleSwarmOptimization(values, weights, max_weight, n_iters,n_particles, c1, c2, Wmax, Wmin, Vmax, Vmin)
+PSO.solve()

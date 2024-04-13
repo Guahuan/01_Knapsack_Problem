@@ -33,6 +33,8 @@ class ParticleSwarmOptimization:
         self.p_best = self.particlesX
         self.p_best_fitness = [self.fitness(particle) for particle in self.p_best]
 
+        self.best_values = []
+
 
     def solve(self):
         for iter in range(self.n_iters):
@@ -60,10 +62,12 @@ class ParticleSwarmOptimization:
                 new_X = 1 / (1 + np.exp(-np.array(self.particlesV[i])))
                 self.particlesX[i] = [1 if vx > random.random() else 0 for vx in new_X]
 
-            print("iter: ", iter)
-            print("best value: ", self.g_best_fitness)
-            print("best weight: ", np.sum(np.array(self.weights) * np.array(self.g_best)))
+            self.best_values.append(self.g_best_fitness)
+            # print("iter: ", iter)
+            # print("best value: ", self.g_best_fitness)
+            # print("best weight: ", np.sum(np.array(self.weights) * np.array(self.g_best)))
 
+        return self.best_values
 
     def fitness(self, particle):
         if np.sum(self.weights * particle) > self.max_weight:
