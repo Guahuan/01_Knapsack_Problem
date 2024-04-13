@@ -22,7 +22,6 @@ max_data_length = 1000
 weights = [95, 4, 60, 32, 23, 72, 80, 62, 65, 46]
 values = [55, 10, 47, 5, 4, 50, 8, 61, 85, 87]
 max_weight = 269
-algorithm = 'BF'
 
 
 # # 最优解: value = 32616
