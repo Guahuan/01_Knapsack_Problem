@@ -93,6 +93,11 @@ cooling_rate = 0.99
 SA = SimulatedAnnealing(values, weights, max_weight, n_iters, max_temp, min_temp, cooling_rate)
 SA_best_values = SA.solve()
 
+SA_best_values = SA_best_values + [None] * (len(df) - len(SA_best_values))
+SA_best_values_series = pd.Series(SA_best_values).ffill()
+df['Simulated Annealing'] = SA_best_values_series
+df.to_csv('res.csv', index=False)
+
 
 # # GA param
 # popsize = 300

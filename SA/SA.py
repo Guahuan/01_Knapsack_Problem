@@ -14,6 +14,8 @@ class SimulatedAnnealing:
         self.min_temp = min_temp
         self.cooling_rate = cooling_rate
 
+        self.best_values = []
+
     def solve(self):
         solution = self.generate_valid_solution()
 
@@ -43,11 +45,14 @@ class SimulatedAnnealing:
                     self.best_value = self.calculate_value(solution)
                     self.best_weight = self.calculate_weight(solution)
 
-                print("iter: ", iter)
-                print("best value: ", self.best_value)
-                print("best weight: ", self.best_weight)
+                self.best_values.append(self.best_value)
+                # print("iter: ", iter)
+                # print("best value: ", self.best_value)
+                # print("best weight: ", self.best_weight)
 
             temp *= self.cooling_rate
+
+        return self.best_values
 
     def generate_valid_solution(self):
         solution = [random.randint(0, 1) for _ in range(len(self.values))]
@@ -56,8 +61,8 @@ class SimulatedAnnealing:
         return solution
 
     def calculate_value(self, solution):
-        return sum(self.values * solution)
+        return np.sum(np.array(self.values) * np.array(solution))
 
 
     def calculate_weight(self, solution):
-        return sum(self.weights * solution)
+        return np.sum(np.array(self.weights) * np.array(solution))
