@@ -1,9 +1,7 @@
 import random
-import pandas as pd
-
 
 class GeneticAlgorithm:
-    def __init__(self, weight, profit, weight_limit, popsize=150, pc=0.8, pm=0.2, N=30):
+    def __init__(self, weight, profit, weight_limit, popsize=20, pc=0.8, pm=0.2, N=30):
         self.weight = weight
         self.profit = profit
         self.weight_limit = weight_limit
@@ -19,34 +17,35 @@ class GeneticAlgorithm:
         self.best_weight = 0
         self.best_weight_pop = []
 
-    '''def init_population(self, n):
+    def sum_pw(self, individual, profit_or_weight):
+        total = 0
+        for i in range(len(individual)):
+            total += individual[i] * profit_or_weight[i]
+        return total
+
+    def put_out(self, individual):
+        for i in range(len(individual)):
+            individual[i] *= random.randint(0, 1)
+        return individual
+
+    def init_population(self):
         self.population = []
         for i in range(self.popsize):
-            individual = [random.randint(0, 1) for _ in range(n)]
-            self.population.append(individual)'''
-
-    def init_population(self, n):
-        self.population = []
-        for _ in range(self.popsize):
-            individual = [random.randint(0, 1) for _ in range(n)]
-            weight_sum = sum([self.weight[i] for i in range(n) if individual[i] == 1])
-            while weight_sum > self.weight_limit:
-                individual = [random.randint(0, 1) for _ in range(n)]
-                weight_sum = sum([self.weight[i] for i in range(n) if individual[i] == 1])
+            individual = []
+            for j in range(len(self.weight)):
+                individual.append(random.randint(0, 1))
+            total_weight = self.sum_pw(individual, self.weight)
+            while total_weight > self.weight_limit:
+                individual = self.put_out(individual)
+                total_weight = self.sum_pw(individual, self.weight)
             self.population.append(individual)
 
     def compute_fitness(self):
         total_weight = []
         total_profit = []
         for individual in self.population:
-            weight_sum = 0
-            profit_sum = 0
-            for i in range(len(individual)):
-                if individual[i] == 1:
-                    weight_sum += self.weight[i]
-                    profit_sum += self.profit[i]
-            total_weight.append(weight_sum)
-            total_profit.append(profit_sum)
+            total_weight.append(self.sum_pw(individual, self.weight))
+            total_profit.append(self.sum_pw(individual, self.profit))
         return total_weight, total_profit
 
     def select(self, total_weight, total_profit):
@@ -70,7 +69,7 @@ class GeneticAlgorithm:
         self.population = new_population
         return w, p
 
-    def roulette_wheel(self, total_profit):
+    def roulettewheel(self, total_profit):
         sum_profit = sum(total_profit)
         p = [profit / sum_profit for profit in total_profit]
         new_population = []
@@ -83,58 +82,77 @@ class GeneticAlgorithm:
         self.population = new_population
 
     def crossover(self):
-        for i in range(0, len(self.population), 2):
+        i = 0
+        new_population = self.population[:]
+        while i < len(self.population):
             if random.uniform(0, 1) < self.pc:
+                mother_index = random.randint(0, len(self.population) - 1)
+                father_index = random.randint(0, len(self.population) - 1)
                 cpoint = random.randint(0, len(self.population[0]) - 1)
-                self.population[i][:cpoint], self.population[i+1][:cpoint] = \
-                    self.population[i+1][:cpoint], self.population[i][:cpoint]
+                if father_index != mother_index:
+                    temp11 = self.population[father_index][:cpoint]
+                    temp12 = self.population[father_index][cpoint:]
+
+                    temp21 = self.population[mother_index][cpoint:]
+                    temp22 = self.population[mother_index][:cpoint]
+
+                    child1 = temp21 + temp11
+                    child2 = temp12 + temp22
+
+                    new_population[father_index] = child1
+                    new_population[mother_index] = child2
+            i += 1
+        self.population = new_population
 
     def mutation(self):
-        for individual in self.population:
-            if random.uniform(0, 1) < self.pm:
-                for _ in range(2):
-                    mpoint = random.randint(0, len(individual) - 1)
-                    individual[mpoint] = 1 - individual[mpoint]
+        temporary = []
+        for i in range(len(self.population)):
+            p = random.uniform(0, 1)
+            if p < self.pm:
+                j = 0
+                while j < 2:
+                    mpoint = random.randint(0, len(self.population[0]) - 1)
+                    if self.population[i][mpoint] == 0:
+                        self.population[i][mpoint] = 1
+                    else:
+                        self.population[i][mpoint] = 0
+                    j += 1
+                temporary.append(self.population[i])
+            else:
+                temporary.append(self.population[i])
+        self.population = temporary
 
-    def run(self, verbose=True):
-        n = len(self.weight)
-        self.init_population(n)
+    def run(self):
+        self.init_population()
         iter = 0
         while iter < self.N:
             iter += 1
-            if verbose:
-                print("——————————————————————————————————————————————————————————————————————————————————————————————————————")
-                print(f'第{iter}代')
-                print(f'第{iter}代群体为:', self.population)
+            # print("——————————————————————————————————————————————————————————————————————————————————————————————————————")
+            print(f'第{iter}代')
+            # print(f'第{iter}代群体为:', self.population)
 
             total_weight, total_profit = self.compute_fitness()
-            if verbose:
-                print('weight为:', total_weight)
-                print('profit为:', total_profit)
+            # print('weight为:', total_weight)
+            # print('profit为:', total_profit)
 
             total_weight, total_profit = self.select(total_weight, total_profit)
-            if verbose:
-                print(f'筛选后的群种为：{self.population}')
-                print(f'筛选后的weight为：{total_weight}')
-                print(f'筛选后的profit为：{total_profit}')
+            # print(f'筛选后的群种为：{self.population}')
+            # print(f'筛选后的weight为：{total_weight}')
+            # print(f'筛选后的profit为：{total_profit}')
 
-            self.roulette_wheel(total_profit)
-            if verbose:
-                print('选择后的种群为:', self.population)
+            self.roulettewheel(total_profit)
+            # print('选择后的种群为:', self.population)
 
             self.crossover()
-            if verbose:
-                print('交叉后的群体为:', self.population)
+            # print('交叉后的群体为:', self.population)
 
             self.mutation()
-            if verbose:
-                print('变异后的群体为:', self.population)
+            # print('变异后的群体为:', self.population)
 
-            if verbose:
-                print('-------------------------------' * 2)
- 
+            # print('-------------------------------' * 2)
+
             total_weight, total_profit = self.compute_fitness()
-            total_weight, total_profit = self.select(total_weight, total_profit)  # 筛选weight是否大于weight_limit
+            total_weight, total_profit = self.select(total_weight, total_profit)
             m = max(range(len(self.population)), key=lambda x: total_profit[x])
             if total_profit[m] > self.best_fitness:
                 self.best_individual = self.population[m]
@@ -144,26 +162,12 @@ class GeneticAlgorithm:
                 self.best_weight = total_weight[m]
                 self.best_weight_pop = total_weight
 
-        if verbose:
-            print("全局最优个体种群为：", self.best_individual_pop)
-            print("全局最优个体为：", self.best_individual)
-            print("全局最优个体种群价值为:", self.best_fitness_pop)
             print("全局最优个体价值为:", self.best_fitness)
-            print("全局最优个体种群重量为：", self.best_weight_pop)
             print("全局最优个体重量为：", self.best_weight)
 
-
-def main():
-    diamonds = pd.read_csv("E:\\2024春夏学期\\软计算与决策\\0-1背包问题\\diamonds.csv")
-    diamonds = diamonds.iloc[:100]
-    weight = diamonds['carat'].values
-    value = diamonds['price'].values
-    weight_limit = 20
-    
-
-    ga = GeneticAlgorithm(weight, value, weight_limit)
-    ga.run()
-
-
-if __name__ == "__main__":
-    main()
+        # print("全局最优个体种群为：", self.best_individual_pop)
+        # print("全局最优个体为：", self.best_individual)
+        # print("全局最优个体种群价值为:", self.best_fitness_pop)
+        # print("全局最优个体价值为:", self.best_fitness)
+        # print("全局最优个体重量为：", self.best_weight)
+        # print("全局最优个体种群重量为：", self.best_weight_pop)

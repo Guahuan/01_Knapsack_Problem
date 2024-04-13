@@ -1,7 +1,9 @@
 import pandas as pd
+from DP.DP import dynamic_knapsack
 from Greedy.Greedy import GreedyKnapsackSolver
-from SA.SA import SimulatedAnnealing
 from TS.TS import TabuKnapsackSolver
+from GA.GA import GeneticAlgorithm
+from SA.SA import SimulatedAnnealing
 from ACO.ACO import AntColonyOptimization
 from PSO.PSO import ParticleSwarmOptimization
 
@@ -20,9 +22,14 @@ max_weight = 10
 n_iters = 1000
 
 
-# # GA param
-# GA = GreedyKnapsackSolver(values, weights, max_weight)
-# GA.solve()
+# # DP
+# best_value, best_combination = dynamic_knapsack(values, weights, max_weight)
+# print("最优解的总价值:", best_value)
+# print("最优解的总重量:", sum(weights[int(i)] for i in range(len(best_combination)) if best_combination[i] == 1))
+
+# # Greedy param
+# Greedy = GreedyKnapsackSolver(values, weights, max_weight)
+# Greedy.solve()
 
 
 # # TS param
@@ -31,12 +38,20 @@ n_iters = 1000
 # TS.solve()
 
 
-# SA param
-max_temp = 1000
-min_temp = 1
-cooling_rate = 0.99
-SA = SimulatedAnnealing(values, weights, max_weight, n_iters, max_temp, min_temp, cooling_rate)
-SA.solve()
+# # GA param
+# popsize = 300
+# pc = 0.8
+# pm = 0.5
+# GA = GeneticAlgorithm(weights, values, max_weight, popsize, pc, pm, n_iters)
+# GA.run()
+
+
+# # SA param
+# max_temp = 1000
+# min_temp = 1
+# cooling_rate = 0.99
+# SA = SimulatedAnnealing(values, weights, max_weight, n_iters, max_temp, min_temp, cooling_rate)
+# SA.solve()
 
 
 # # ACO param

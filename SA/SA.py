@@ -24,8 +24,11 @@ class SimulatedAnnealing:
         temp = self.max_temp
         while temp > self.min_temp:
             for iter in range(self.n_iters):
-                i = random.randint(0, len(self.values) - 1)
                 new_solution = solution[:]
+
+                # TODO: selete 0 -> 1, 1 -> 0
+                i = random.randint(0, len(self.values) - 1)
+
                 new_solution[i] = 1 - new_solution[i]
 
                 new_weight = self.calculate_weight(new_solution)
