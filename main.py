@@ -24,15 +24,16 @@ max_weight = 269
 # n_iters = 1000
 
 
-# BF
-BF = BruteForceKnapsackSolver(values, weights, max_weight)
-BF.solve()
+# # BF
+# BF = BruteForceKnapsackSolver(values, weights, max_weight)
+# BF.solve()
 
 
 # # DP
 # best_value, best_combination = dynamic_knapsack(values, weights, max_weight)
 # print("最优解的总价值:", best_value)
 # print("最优解的总重量:", sum(weights[int(i)] for i in range(len(best_combination)) if best_combination[i] == 1))
+
 
 # # Greedy param
 # Greedy = GreedyKnapsackSolver(values, weights, max_weight)
