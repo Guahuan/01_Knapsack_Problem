@@ -8,7 +8,7 @@ class BruteForceKnapsackSolver:
         self.n_items = len(values)
 
     def solve(self):
-        max_value = 0
+        best_value = 0
         best_combination = None
 
         # Generate all possible combinations of items
@@ -17,9 +17,11 @@ class BruteForceKnapsackSolver:
                 weight = sum(self.weights[i] for i in combination)
                 if weight <= self.max_weight:
                     value = sum(self.values[i] for i in combination)
-                    if value > max_value:
-                        max_value = value
+                    if value > best_value:
+                        best_value = value
                         best_combination = combination
 
-        print("best value: ", max_value)
-        print("best weight: ", sum(self.weights[i] for i in best_combination))
+        return best_value, sum(self.weights[i] for i in best_combination)
+
+        # print("best value: ", best_value)
+        # print("best weight: ", sum(self.weights[i] for i in best_combination))
