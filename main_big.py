@@ -15,7 +15,7 @@ from PSO.PSO import ParticleSwarmOptimization
 
 
 # set all the parameters here
-output_file = './output/big_32616.csv'
+output_file = './output/big_C&W.csv'
 max_data_length = 1500
 
 
@@ -23,8 +23,8 @@ max_data_length = 1500
 diamonds = pd.read_csv('./input/diamonds.csv')
 diamonds = diamonds.iloc[:100]
 weights = diamonds['carat'].values
-values = diamonds['price'].values
 max_weight = 10
+values = diamonds['price'].values
 
 
 if os.path.exists(output_file) and os.stat(output_file).st_size > 0:
