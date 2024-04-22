@@ -31,7 +31,7 @@ class AntColonyOptimization:
         self.decay = decay
 
         self.n_item = len(values)
-        self.pheromone = np.ones(self.n_item)
+        self.pheromone = np.full(self.n_item, 10)
 
         self.best_value = 0
         self.best_weight = 0
@@ -51,9 +51,9 @@ class AntColonyOptimization:
                 solutions.append(solution)
                 total_values.append(total_value)
 
-            self.update_pheromone(solutions, total_values)
+                self.solutions.append(total_value)
 
-            self.solutions.append(total_value)
+            self.update_pheromone(solutions, total_values)
 
             # print("iter: ", iter)
             # print("best value: ", self.best_value)

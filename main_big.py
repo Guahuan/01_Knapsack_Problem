@@ -16,7 +16,7 @@ from PSO.PSO import ParticleSwarmOptimization
 
 # set all the parameters here
 output_file = './output/big_C&W.csv'
-max_data_length = 200
+max_data_length = 20000
 
 
 diamonds = pd.read_csv('./input/diamonds.csv')
@@ -116,19 +116,20 @@ else:
 # print('GA done')
 
 
-# ACO param
-n_iters = 20
-n_ants = 200
-alpha = 0.7
-beta = 2.3
-decay = 0.9
-ACO = AntColonyOptimization(values, weights, max_weight, costs, max_cost, n_iters, n_ants, alpha, beta, decay)
-ACO_best_values = ACO.solve()
-ACO_best_values = ACO_best_values + [None] * (len(df) - len(ACO_best_values))
-ACO_best_values_series = pd.Series(ACO_best_values).ffill()
-df['Ant Colony Optimization'] = ACO_best_values_series
-df.to_csv(output_file, index=False)
-print('ACO done')
+# # ACO param
+# n_iters = 200
+# n_ants = 150
+# alpha = 1
+# beta = 2
+# decay = 0.5
+# ACO = AntColonyOptimization(values, weights, max_weight, costs, max_cost, n_iters, n_ants, alpha, beta, decay)
+# ACO_best_values = ACO.solve()
+# ACO_best_values = ACO_best_values + [None] * (len(df) - len(ACO_best_values))
+# ACO_best_values_series = pd.Series(ACO_best_values).ffill()
+# df['Ant Colony Optimization'] = ACO_best_values_series
+# df.to_csv(output_file, index=False)
+# print('ACO done')
+# print('best value: ' + (int)ACO.best_value)
 
 
 # # PSO param
@@ -140,7 +141,7 @@ print('ACO done')
 # Wmin = 1
 # Vmax = 10
 # Vmin = -10
-# PSO = ParticleSwarmOptimization(values, weights, max_weight, n_iters,n_particles, c1, c2, Wmax, Wmin, Vmax, Vmin)
+# PSO = ParticleSwarmOptimization(values, weights, max_weight, costs, max_cost, n_iters, n_particles, c1, c2, Wmax, Wmin, Vmax, Vmin)
 # PSO_best_values = PSO.solve()
 # PSO_best_values = PSO_best_values + [None] * (len(df) - len(PSO_best_values))
 # PSO_best_values_series = pd.Series(PSO_best_values).ffill()
@@ -149,9 +150,10 @@ print('ACO done')
 # print('PSO done')
 
 
+df = df.iloc[:max_data_length]
 plt.figure(figsize=(12, 8))  # 增大图表的尺寸
 for column in df.columns:
-    plt.plot(df[column], label=column, linewidth=2)  # 增大线条的宽度
+    plt.plot(df[column], label=column, linewidth=0.5)  # 增大线条的宽度
 plt.xlabel('Iteration', fontsize=14)  # 增大标签的字体大小
 plt.ylabel('Value', fontsize=14)  # 增大标签的字体大小
 plt.title('Performance of Optimization Algorithms', fontsize=16)  # 增大标题的字体大小

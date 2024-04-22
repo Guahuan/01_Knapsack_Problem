@@ -8,10 +8,12 @@ import numpy as np
     3、粒子更新方式
 """
 class ParticleSwarmOptimization:
-    def __init__(self, values, weights, max_weight, n_iters, n_particles, c1, c2, Wmax, Wmin, Vmax, Vmin):
+    def __init__(self, values, weights, max_weight, costs, max_cost, n_iters, n_particles, c1, c2, Wmax, Wmin, Vmax, Vmin):
         self.weights = np.array(weights)
         self.values = np.array(values)
         self.max_weight = max_weight
+        self.costs = np.array(costs)
+        self.max_cost = max_cost
         self.n_iters = n_iters
         self.n_particles = n_particles
         self.c1 = c1
@@ -66,11 +68,12 @@ class ParticleSwarmOptimization:
             # print("iter: ", iter)
             # print("best value: ", self.g_best_fitness)
             # print("best weight: ", np.sum(np.array(self.weights) * np.array(self.g_best)))
+            # print("best cost: ", np.sum(np.array(self.costs) * np.array(self.g_best)))
 
         return self.best_values
 
     def fitness(self, particle):
-        if np.sum(self.weights * particle) > self.max_weight:
+        if np.sum(self.weights * particle) > self.max_weight or np.sum(self.costs * particle) > self.max_cost:
             return 0
         else:
             return np.sum(self.values * particle)
