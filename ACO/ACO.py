@@ -7,7 +7,7 @@ import numpy as np
     3、更新信息素
 """
 class AntColonyOptimization:
-    def __init__(self, values, weights, max_weight, n_ants, n_iters, alpha, beta, decay):
+    def __init__(self, values, weights, max_weight, costs, max_cost, n_iters, n_ants, alpha, beta, decay):
         """
         Args:
         values (list): The list of values of the items.
@@ -22,6 +22,8 @@ class AntColonyOptimization:
         self.values = values
         self.weights = weights
         self.max_weight = max_weight
+        self.costs = costs
+        self.max_cost = max_cost
         self.n_ants = n_ants
         self.n_iters = n_iters
         self.alpha = alpha
@@ -33,9 +35,10 @@ class AntColonyOptimization:
 
         self.best_value = 0
         self.best_weight = 0
+        self.best_cost = 0
         self.best_solution = None
 
-        self.best_values = []
+        self.solutions = []
 
     def solve(self):
         for iter in range(self.n_iters):
@@ -50,20 +53,22 @@ class AntColonyOptimization:
 
             self.update_pheromone(solutions, total_values)
 
-            self.best_values.append(total_value)
+            self.solutions.append(total_value)
 
             # print("iter: ", iter)
             # print("best value: ", self.best_value)
             # print("best weight: ", self.best_weight)
+            # print("best cost: ", self.best_cost)
             # # print("best solution: ", self.best_solution)
 
-        return self.best_values
+        return self.solutions
 
 
     def construct_solution(self):
         tabu = [0 for _ in range(self.n_item)]
         solution = [0 for _ in range(self.n_item)]
         total_weight = 0
+        total_cost = 0
         total_value = 0
 
         while(0 in tabu):
@@ -72,16 +77,18 @@ class AntColonyOptimization:
                 if np.random.rand() < p[i]:
                     # ant select item i
                     tabu[i] = 1
-                    if total_weight + self.weights[i] <= self.max_weight:
+                    if total_weight + self.weights[i] <= self.max_weight and total_cost + self.costs[i] <= self.max_cost:
                         # put in bag
                         solution[i] = 1
                         total_weight += self.weights[i]
+                        total_cost += self.costs[i]
                         total_value += self.values[i]
                     break
 
         if total_value > self.best_value:
             self.best_value = total_value
             self.best_weight = total_weight
+            self.best_cost = total_cost
             self.best_solution = solution
 
         return solution, total_value
@@ -91,9 +98,10 @@ class AntColonyOptimization:
         mask = (tabu == 0)
         values = np.array(self.values)
         weights = np.array(self.weights)
-        down = np.sum(self.pheromone[mask] ** self.alpha * ((values / weights)[mask] ** self.beta))
+        costs = np.array(self.costs)
+        down = np.sum(self.pheromone[mask] ** self.alpha * (((values / weights + values / costs) * 0.5)[mask] ** self.beta))
         p = np.zeros(self.n_item)
-        p[mask] = (self.pheromone[mask] ** self.alpha * (values[mask] / weights[mask]) ** self.beta) / down
+        p[mask] = (self.pheromone[mask] ** self.alpha * (((values / weights + values / costs) * 0.5)[mask]) ** self.beta) / down
         return p.tolist()
 
     def update_pheromone(self, solutions, total_values):
