@@ -19,11 +19,12 @@ output_file = './output/big_C&W.csv'
 max_data_length = 1500
 
 
-# 最优解: value = 32616
 diamonds = pd.read_csv('./input/diamonds.csv')
 diamonds = diamonds.iloc[:100]
 weights = diamonds['carat'].values
 max_weight = 10
+cost = diamonds['cost'].values
+max_cost = 10
 values = diamonds['price'].values
 
 
