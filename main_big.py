@@ -132,22 +132,22 @@ else:
 # print('best value: ' + (int)ACO.best_value)
 
 
-# # PSO param
-# n_iters = 1000
-# n_particles = 300
-# c1 = 1.5
-# c2 = 0.8
-# Wmax = 1
-# Wmin = 1
-# Vmax = 10
-# Vmin = -10
-# PSO = ParticleSwarmOptimization(values, weights, max_weight, costs, max_cost, n_iters, n_particles, c1, c2, Wmax, Wmin, Vmax, Vmin)
-# PSO_best_values = PSO.solve()
-# PSO_best_values = PSO_best_values + [None] * (len(df) - len(PSO_best_values))
-# PSO_best_values_series = pd.Series(PSO_best_values).ffill()
-# df['Particle Swarm Optimization'] = PSO_best_values_series
-# df.to_csv(output_file, index=False)
-# print('PSO done')
+# PSO param
+n_iters = 10000
+n_particles = 150
+c1 = 1.5
+c2 = 0.8
+Wmax = 1
+Wmin = 1
+Vmax = 10
+Vmin = -10
+PSO = ParticleSwarmOptimization(values, weights, max_weight, costs, max_cost, n_iters, n_particles, c1, c2, Wmax, Wmin, Vmax, Vmin)
+PSO_best_values = PSO.solve()
+PSO_best_values = PSO_best_values + [None] * (len(df) - len(PSO_best_values))
+PSO_best_values_series = pd.Series(PSO_best_values).ffill()
+df['Particle Swarm Optimization'] = PSO_best_values_series
+df.to_csv(output_file, index=False)
+print('PSO done')
 
 
 df = df.iloc[:max_data_length]
