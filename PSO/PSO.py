@@ -39,13 +39,16 @@ class ParticleSwarmOptimization:
 
 
     def solve(self):
+        self.adjust_particles()
+
         for iter in range(self.n_iters):
             for i in range(self.n_particles):
                 particle = self.particlesX[i]
                 fitness = self.fitness(particle)
 
-                if fitness > self.fitness(self.p_best[i]):
+                if fitness > self.p_best_fitness[i]:
                     self.p_best[i] = particle
+                    self.p_best_fitness[i] = fitness
 
                 if fitness > self.g_best_fitness:
                     self.g_best = particle
@@ -72,7 +75,28 @@ class ParticleSwarmOptimization:
 
         return self.best_values
 
+    def adjust_particles(self):
+        rho = [(vj / wj + vj / cj) * 0.5 for vj, wj, cj in zip(self.values, self.weights, self.costs)]
+        min_rho = np.argsort(rho)
+        max_rho = np.argsort(rho)[::-1]
+        for i in range(self.n_particles):
+            particle = self.particlesX[i]
+            while self.fitness(particle) <= 0: # 不满足背包限制
+                for j in min_rho:
+                    if particle[j] == 1:
+                        particle[j] = 0
+                        break
+
+            while self.fitness(particle) > 0: # 满足背包限制
+                for j in max_rho:
+                    if particle[j] == 0:
+                        particle[j] = 1
+                        break
+
+
     def fitness(self, particle):
+        # Q = (self.n_item / 5) * np.max(self.values)
+        # return np.sum(self.values * particle) + Q * min(0, self.max_weight - np.sum(self.weights * particle)) + Q * min(0, self.max_cost - np.sum(self.costs * particle))
         if np.sum(self.weights * particle) > self.max_weight or np.sum(self.costs * particle) > self.max_cost:
             return 0
         else:

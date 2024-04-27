@@ -16,7 +16,7 @@ from PSO.PSO import ParticleSwarmOptimization
 
 # set all the parameters here
 output_file = './output/big_C&W.csv'
-max_data_length = 20000
+max_data_length = 500
 
 
 diamonds = pd.read_csv('./input/diamonds.csv')
@@ -24,7 +24,7 @@ diamonds = diamonds.iloc[:100]
 weights = diamonds['carat'].values
 max_weight = 10
 costs = diamonds['cost'].values
-max_cost = 10
+max_cost = 100
 values = diamonds['price'].values
 
 
@@ -117,7 +117,7 @@ else:
 
 
 # # ACO param
-# n_iters = 200
+# n_iters = 50
 # n_ants = 150
 # alpha = 1
 # beta = 2
@@ -129,11 +129,10 @@ else:
 # df['Ant Colony Optimization'] = ACO_best_values_series
 # df.to_csv(output_file, index=False)
 # print('ACO done')
-# print('best value: ' + (int)ACO.best_value)
-
+# print('best value: ' + str(int(ACO.best_value)))
 
 # PSO param
-n_iters = 10000
+n_iters = 1000
 n_particles = 150
 c1 = 1.5
 c2 = 0.8
@@ -148,6 +147,7 @@ PSO_best_values_series = pd.Series(PSO_best_values).ffill()
 df['Particle Swarm Optimization'] = PSO_best_values_series
 df.to_csv(output_file, index=False)
 print('PSO done')
+print('best value: ' + str(int(PSO.g_best_fitness)))
 
 
 df = df.iloc[:max_data_length]
